@@ -27,7 +27,7 @@ public class Desktop {
 				ctrl.alta(p);
 				break;
 			case 4:
-				ctrl.mostrar();
+			//	ctrl.mostrar();
 				break;
 		}}
 		

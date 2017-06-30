@@ -13,6 +13,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Desk {
 
@@ -50,7 +52,7 @@ public class Desk {
 	 */
 	private void initialize() {
 		frame = new JFrame(); 
-		frame.setBounds(100, 100, 340, 300); //setea donde aparece y con que dimenciones 
+		frame.setBounds(100, 100, 419, 311); //setea donde aparece y con que dimenciones 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		CtrlABMPersona controlador = new CtrlABMPersona();
@@ -119,12 +121,19 @@ public class Desk {
 
 			private void actualizar2() {
 			//Persona p = controlador.buscar(Integer.parseInt(txtDni.getText()));
-			controlador.modific(
+			/*controlador.modific(
 					Integer.parseInt(txtDni.getText()),
 					txtNom.getText(),
 					txtApe.getText()
 					);
 			jlresultado.setText("Actualizado");
+			*/
+				p.setNombre(txtNom.getText());
+				p.setApellido(txtApe.getText());
+				p.setDni(Integer.parseInt(txtDni.getText()));
+				p.setHabilitado(true);
+				controlador.modific(p);
+				jlresultado.setText("Actualizado en DB");
 			}
 			
 		});
@@ -153,6 +162,29 @@ public class Desk {
 				}
 			}
 				
+		});
+		
+		JButton btnBuscarEnDb = new JButton("Buscar en DB");
+		btnBuscarEnDb.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent t) {
+				this.buscardb();
+			}
+
+			private void buscardb() {				
+				Persona per = new Persona();
+				
+				
+				per = controlador.getByDni(Integer.parseInt(txtDni.getText()));
+				if (per != null){
+				jlresultado.setText("Encontrado en la DB");
+				txtApe.setText(per.getApellido());
+				txtNom.setText(per.getNombre());
+				chckbxHabilitado.setSelected(per.habilitado);
+								}
+				else {
+					jlresultado.setText("No encontrado en la DB");
+				}
+			}
 		});
 		
 		
@@ -187,8 +219,11 @@ public class Desk {
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnActualizar)
-						.addComponent(btnBuscar))
-					.addContainerGap(40, Short.MAX_VALUE))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnBuscar)
+							.addGap(18)
+							.addComponent(btnBuscarEnDb)))
+					.addContainerGap(57, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -205,10 +240,11 @@ public class Desk {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblDni)
 						.addComponent(txtDni, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnBuscar))
+						.addComponent(btnBuscar)
+						.addComponent(btnBuscarEnDb))
 					.addGap(18)
 					.addComponent(chckbxHabilitado)
-					.addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(jlresultado)
 					.addGap(18)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
